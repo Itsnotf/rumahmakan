@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
-        <Provider className="bg-[#F3F2EE]">
+        <Provider className="bg-[#B69C6D]">
           <div className="nav-top">
             <Nav />
           </div>
