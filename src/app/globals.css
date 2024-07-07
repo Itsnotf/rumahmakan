@@ -6,7 +6,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 50; 
+    z-index: 30; 
   }
   
   /* .custom-scrollbar {
@@ -77,8 +77,8 @@
 }
 
 .img {
-    max-width: 45vh;
-    max-height: 50vh;
+    max-width: 70vh;
+    max-height: 80vh;
     transition: 0.5s;
     vertical-align: top;
     filter: saturate(40%) sepia(30%) hue-rotate(5deg );
@@ -92,7 +92,7 @@ a:hover .img {
 }
 
 .slower-2{
-    transform: rotate(90deg) translateZ(-0.25px) scale(1.0.5) translateX(0) translateY(8vh);
+    transform: rotate(90deg) translateZ(-0.25px) scale(2.5) translateX(0) translateY(-100vh);
 }
 
 .slower-3{

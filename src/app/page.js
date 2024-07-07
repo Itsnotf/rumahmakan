@@ -7,6 +7,7 @@ import { useScroll } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Lenis from 'lenis';
 import Footer from "@/components/Footer";
+import Testi from "@/components/Testi";
 
 
 export default function Home() {
@@ -35,6 +36,7 @@ export default function Home() {
      <Sejarah  scrollYProgress={scrollYProgress}/>
      <Kuantitatif  scrollYProgress={scrollYProgress}/>
      <Menu  scrollYProgress={scrollYProgress}/>
+     <Testi/>
      <Footer/>
     </main>
   );

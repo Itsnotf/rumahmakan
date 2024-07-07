@@ -1,16 +1,24 @@
-import React from 'react'
+'use client'
+import React, { useEffect } from 'react'
 import hero from '../../../../public/assets/Hero.svg'
 import tentang from '../../../../public/assets/tentang.JPG'
 import { FaBowlFood } from "react-icons/fa6";
 import { FaHeartbeat } from "react-icons/fa";
 import { MdRoomService } from "react-icons/md";
 import Image from 'next/image';
-
-
-
-
+import Lenis from 'lenis';
 
 export default function page() {
+  useEffect(() => {
+    const lenis = new Lenis()
+
+    function raf(time) {
+        lenis.raf(time)
+        requestAnimationFrame(raf)
+    }
+
+    requestAnimationFrame(raf)
+}, [])
   return (
     <section className='mt-[60px] w-full'>
 
