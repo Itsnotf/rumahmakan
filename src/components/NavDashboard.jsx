@@ -12,10 +12,10 @@ export default function NavDashboard() {
 
     const menuItems = [
         { name: "Dashboard", path: "/dashboard" },
-        { name: "Kelola Galeri", path: "/kelolaGaleri" },
-        { name: "Kelola Tentang Kami", path: "/kelolaTentangKami" },
-        { name: "Kelola Ulasan", path: "/kelolaUlasan" },
-        { name: "Kelola Home", path: "/kelolaHome" },
+        { name: "Kelola Galeri", path: "/kelola-galeri" },
+        { name: "Kelola Tentang Kami", path: "/kelola-tentangkami" },
+        { name: "Kelola Ulasan", path: "/kelola-ulasan" },
+        { name: "Kelola Home", path: "/kelola-home" },
     ];
 
 
