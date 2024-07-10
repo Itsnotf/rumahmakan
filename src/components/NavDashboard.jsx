@@ -5,19 +5,20 @@ import logo from "../../public/assets/logo.png"
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-export default function Nav() {
+import { UserButton } from "@clerk/nextjs";
+export default function NavDashboard() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
-   
+
     const menuItems = [
-        { name: "Beranda", path: "/" },
-        { name: "Menu", path: "/menu" },
-        { name: "Tentang Kami", path: "/tentang-kami" },
-        { name: "Galeri", path: "/galeri" },
-        { name: "Pedoman Merk", path: "/pedoman-merk" },
+        { name: "Dashboard", path: "/dashboard" },
+        { name: "Kelola Galeri", path: "/kelolaGaleri" },
+        { name: "Kelola Tentang Kami", path: "/kelolaTentangKami" },
+        { name: "Kelola Ulasan", path: "/kelolaUlasan" },
+        { name: "Kelola Home", path: "/kelolaHome" },
     ];
 
-    
+
     return (
         <Navbar
             classNames={{
@@ -38,12 +39,7 @@ export default function Nav() {
             }} isBordered onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent className="xl:-mx-44 ">
                 <NavbarBrand>
-                    <Link href="/">
-                        <Image
-                            width={150}
-                            src={logo}
-                        />
-                    </Link>
+                    <UserButton />
                 </NavbarBrand>
 
                 <NavbarMenuToggle
@@ -55,8 +51,8 @@ export default function Nav() {
             <NavbarContent className="hidden xl:-mx-32 sm:flex xl:flex xl:gap-10 gap-4" justify="center">
                 {menuItems.map((item, index) => (
                     <NavbarItem key={index} isActive={pathname === item.path}>
-                        <Link 
-                            className={pathname === item.path ? "text-[#4F6C51]" : "text-[#C2AD85]"  }
+                        <Link
+                            className={pathname === item.path ? "text-[#4F6C51]" : "text-[#C2AD85]"}
                             aria-current={item.path ? "page" : undefined}
                             href={item.path}
                         >
@@ -78,6 +74,7 @@ export default function Nav() {
                     </NavbarMenuItem>
                 ))}
             </NavbarMenu>
+
         </Navbar>
 
 
