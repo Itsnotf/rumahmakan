@@ -1,15 +1,13 @@
-import { getDataHome } from '@/service/data/home'
+import { getDataHomeAll } from '@/service/data/home'
 import { NextResponse } from 'next/server'
 
-export async function POST(request) {
+export async function GET(request) {
   try {
-    const { idHome } = await request.json()
-
-    const response = await getDataHome(idHome)
+    const json = await getDataHomeAll()
 
     let json_response = {
       status: 'success',
-      data: response,
+      data: json,
     }
     return new NextResponse(JSON.stringify(json_response), {
       status: 201,
