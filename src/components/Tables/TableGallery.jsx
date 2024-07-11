@@ -1,74 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  getDataGalleryAll,
-  tambahGallery,
-  ubahGallery,
-  hapusGallery,
-} from "../../service/data/gallery";
 import axios from "axios";
+import Image from "next/image";
 
 const TableGallery = () => {
   const [galleryData, setGalleryData] = useState([]);
-  const [newGallery, setNewGallery] = useState({ class_name: "", img: "" });
-
-  const [input, setInput] = useState({
-    idGallery: "",
-    class_name: "",
-    img: "",
-  });
+  const [newGallery, setNewGallery] = useState({ class_name: "", img: null });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    handleGetData()
-  }, [])
-
-  const handleDelete = async (packageItem) => {
-    try {
-      // console.log({ packageItem })
-
-      if (!confirm("Apakah anda yakin mau menghapus data gallery ini?")) return;
-
-      const response = await axios.delete(`/api/gallery/delete`, {
-        headers: { "Content-Type": "application/json" },
-        data: {
-          idGallery: packageItem?.idGallery,
-        },
-      });
-
-      galleryState.deleteData(packageItem?.idGallery);
-
-      console.log("Data success deleted");
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error:", error?.message);
-        console.log("Data failed delete");
-      }
-    }
-  };
-
-  const handleAdd = async () => {
-    try {
-      const response = await axios.post(`/api/gallery/create`, newGallery, {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const addedGallery = response.data;
-      setGalleryData([...galleryData, addedGallery]);
-      setNewGallery({ class_name: "", img: "" });
-      console.log("Data successfully added");
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error:", error.message);
-        console.log("Data failed to add");
-      }
-    }
-  };
+    handleGetData();
+  }, []);
 
   const handleGetData = async () => {
     try {
       const response = await axios.get(`/api/gallery/read`);
-      console.log(response.data); // Logging the response directly
+      console.log(response.data.data); // Logging the response directly
 
       // Ensure response.data.data is an array
       if (Array.isArray(response.data.data)) {
@@ -86,16 +34,72 @@ const TableGallery = () => {
     }
   };
 
+  const handleAdd = async () => {
+    try {
+      // Create a FormData object to send data
+      const formData = new FormData();
+      formData.append("class_name", newGallery.class_name);
+      formData.append("img", newGallery.img); // Append the file object
+  
+      // Send the data to your API route that handles gallery creation
+      const response = await axios.post(`/api/gallery/create`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      const addedGallery = response.data;
+      setGalleryData([...galleryData, addedGallery]);
+      setNewGallery({ class_name: "", img: null });
+      console.log("Data successfully added");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error:", error.message);
+        console.log("Data failed to add");
+      }
+    }
+  };
+  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewGallery({ ...newGallery, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    setNewGallery({ ...newGallery, img: e.target.files[0] });
+  };
 
+  const handleDelete = async (packageItem) => {
+    try {
+      // console.log({ packageItem })
+
+      if (!confirm("Apakah anda yakin mau menghapus data gallery ini?")) return;
+
+      const response = await axios.delete(`/api/gallery/delete`, {
+        headers: { "Content-Type": "application/json" },
+        data: {
+          idGallery: packageItem?.idGallery,
+        },
+      });
+
+      setGalleryData(
+        galleryData.filter((item) => item.idGallery !== packageItem.idGallery)
+      );
+
+      console.log("Data success deleted");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error:", error?.message);
+        console.log("Data failed delete");
+      }
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Gallery</h1>
+      {error && <p>Error: {error}</p>}
       <table className="min-w-full bg-white">
         <thead>
           <tr>
@@ -118,10 +122,9 @@ const TableGallery = () => {
             </td>
             <td className="border px-4 py-2">
               <input
-                type="text"
+                type="file"
                 name="img"
-                value={newGallery.img}
-                onChange={handleInputChange}
+                onChange={handleFileChange}
                 className="border rounded px-2 py-1"
                 placeholder="Image URL"
               />
@@ -135,19 +138,33 @@ const TableGallery = () => {
               </button>
             </td>
           </tr>
-          {Array.isArray(galleryData) && galleryData.map((galleryItem, key) => (
-            <tr key={key}>
-              <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <h5 className="font-medium text-black dark:text-white">
-                  {galleryItem.class_name}
-                </h5>
-              </td>
-              <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                <p className="text-black dark:text-white">{galleryItem.img}</p>
-              </td>
-              <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"></td>
-            </tr>
-          ))}
+          {Array.isArray(galleryData) &&
+            galleryData.map((galleryItem, key) => (
+              <tr key={key}>
+                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {galleryItem.class_name}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                <Image
+                    src={galleryItem.img}
+                    alt={galleryItem.class_name}
+                    width={100}
+                    height={100}
+                    className="object-cover"
+                  />
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                  <button
+                    onClick={() => handleDelete(galleryItem)}
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
