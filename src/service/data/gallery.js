@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
+
 export default async function getDataGalleryAll() {
   try {
     const galleryCollectionRef = collection(db, "gallery");
@@ -16,7 +17,12 @@ export default async function getDataGalleryAll() {
 
     const galleryData = [];
     gallerySnapshot.forEach((doc) => {
-      galleryData.push({ idGallery: doc.id, ...doc.data });
+      const data = doc.data();
+      galleryData.push({ 
+        idGallery: doc.id, 
+        class_name: data.class_name, 
+        img: data.img 
+      });
     });
 
     return galleryData;
@@ -25,6 +31,7 @@ export default async function getDataGalleryAll() {
     throw error;
   }
 }
+
 
 export async function getDataGallery(idGallery) {
     try {
@@ -40,7 +47,7 @@ export async function getDataGallery(idGallery) {
       console.error('Error fetching gallery data:', error)
       throw error
     }
-  }
+}
   
   export async function tambahGallery(dataGallery) {
     try {

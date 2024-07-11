@@ -1,24 +1,32 @@
-import { getDataGallery } from '@/service/data/gallery'
-import { NextResponse } from 'next/server'
+import getDataGalleryAll from "../../../../service/data/gallery";
+import { NextResponse, NextRequest} from "next/server";
 
-export async function POST(request) {
+export async function GET() {
   try {
-    const { idGallery } = await request.json()
+    const json = await getDataGalleryAll();
+    console.log("API Response:", json);
 
-    const response = await getDataGallery(idGallery)
+    const json_response = {
+      status: "success",
+      data: json,
+    };
 
-    let json_response = {
-      status: 'success',
-      data: response,
-    }
     return new NextResponse(JSON.stringify(json_response), {
-      status: 201,
-      headers: { 'Content-Type': 'application/json' },
-    })
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+    
   } catch (error) {
-    return new NextResponse(JSON.stringify(error), {
+    console.error("API Error:", error);
+
+    const error_response = {
+      status: "error",
+      message: error.message || "An error occurred",
+    };
+
+    return new NextResponse(JSON.stringify(error_response), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    })
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
