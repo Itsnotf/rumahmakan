@@ -6,17 +6,23 @@ import Image from "next/image";
 
 const TableGallery = () => {
   const [galleryData, setGalleryData] = useState([]);
-  const [newGallery, setNewGallery] = useState({ class_name: "", img: null });
+  const [newGallery, setNewGallery] = useState({
+    class_name: "slower-1",
+    img: null,
+  });
   const [error, setError] = useState(null);
 
   useEffect(() => {
     handleGetData();
   }, []);
 
+  const handleSelectChange = (e) => {
+    setNewGallery({ ...newGallery, class_name: e.target.value });
+  };
+
   const handleGetData = async () => {
     try {
       const response = await axios.get(`/api/gallery/read`);
-      console.log(response.data.data); // Logging the response directly
 
       // Ensure response.data.data is an array
       if (Array.isArray(response.data.data)) {
@@ -36,34 +42,28 @@ const TableGallery = () => {
 
   const handleAdd = async () => {
     try {
-      // Create a FormData object to send data
       const formData = new FormData();
       formData.append("class_name", newGallery.class_name);
       formData.append("img", newGallery.img); // Append the file object
-  
-      // Send the data to your API route that handles gallery creation
+
       const response = await axios.post(`/api/gallery/create`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-  
+
       const addedGallery = response.data;
       setGalleryData([...galleryData, addedGallery]);
       setNewGallery({ class_name: "", img: null });
       console.log("Data successfully added");
+
+      handleGetData();
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error:", error.message);
         console.log("Data failed to add");
       }
     }
-  };
-  
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewGallery({ ...newGallery, [name]: value });
   };
 
   const handleFileChange = (e) => {
@@ -72,8 +72,6 @@ const TableGallery = () => {
 
   const handleDelete = async (packageItem) => {
     try {
-      // console.log({ packageItem })
-
       if (!confirm("Apakah anda yakin mau menghapus data gallery ini?")) return;
 
       const response = await axios.delete(`/api/gallery/delete`, {
@@ -96,6 +94,22 @@ const TableGallery = () => {
     }
   };
 
+//   async function getTentangKamiImageDownloadURL(imageFileName) {
+//     const imgRef = ref(storage, `tentangkami/${imageFileName}`);
+//     try {
+//       const downloadURL = await getDownloadURL(imgRef);
+//       console.log(downloadURL);
+//       return downloadURL;
+//     } catch (error) {
+//       console.error("Error getting download URL:", error);
+//       throw error;
+//     }
+//   }
+
+//   getTentangKamiImageDownloadURL("tentang.JPG")
+
+
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Gallery</h1>
@@ -111,14 +125,26 @@ const TableGallery = () => {
         <tbody>
           <tr>
             <td className="border px-4 py-2">
-              <input
-                type="text"
+              <select
                 name="class_name"
                 value={newGallery.class_name}
-                onChange={handleInputChange}
+                onChange={handleSelectChange}
                 className="border rounded px-2 py-1"
-                placeholder="Class Name"
-              />
+              >
+                {[
+                  "slower-1",
+                  "slower-2",
+                  "slower-3",
+                  "slower-4",
+                  "slower-5",
+                  "slower-6",
+                  "slower-7",
+                ].map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
             </td>
             <td className="border px-4 py-2">
               <input
@@ -147,7 +173,7 @@ const TableGallery = () => {
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                <Image
+                  <Image
                     src={galleryItem.img}
                     alt={galleryItem.class_name}
                     width={100}
