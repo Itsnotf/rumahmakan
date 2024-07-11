@@ -52,19 +52,14 @@ export async function tambahGallery(dataGallery) {
   try {
     const { img, ...otherData } = dataGallery;
 
-    // Buat referensi storage
     const storageRef = ref(storage, `gallery/${img.name}`);
 
-    // Unggah file gambar ke Firebase Storage
     const snapshot = await uploadBytes(storageRef, img);
 
-    // Dapatkan URL download dari gambar yang diunggah
     const downloadURL = await getDownloadURL(snapshot.ref);
 
-    // Gabungkan URL download ke dataGallery
     const dataGalleryWithImgURL = { ...otherData, img: downloadURL };
 
-    // Tambah dataGallery ke Firestore
     const docRef = await addDoc(
       collection(db, "gallery"),
       dataGalleryWithImgURL
