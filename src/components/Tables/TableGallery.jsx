@@ -7,13 +7,11 @@ import {
   ubahGallery,
   hapusGallery,
 } from "../../service/data/gallery";
-import useGalleryState from "@/hooks/useGalleryState";
 import axios from "axios";
 
 const TableGallery = () => {
   const [galleryData, setGalleryData] = useState([]);
   const [newGallery, setNewGallery] = useState({ class_name: "", img: "" });
-  const galleryState = useGalleryState();
 
   const [input, setInput] = useState({
     idGallery: "",
@@ -56,13 +54,12 @@ const TableGallery = () => {
       });
 
       const addedGallery = response.data;
-      galleryState.addData(addedGallery);
-
+      setGalleryData([...galleryData, addedGallery]);
       setNewGallery({ class_name: "", img: "" });
-      console.log("Data success added");
+      console.log("Data successfully added");
     } catch (error) {
       if (error instanceof Error) {
-        console.error("Error:", error?.message);
+        console.error("Error:", error.message);
         console.log("Data failed to add");
       }
     }
