@@ -1,15 +1,13 @@
-import { getDataTentangKami } from '@/service/data/tentangKami'
+import getDataTentangKamiAll  from '@/service/data/tentangKami'
 import { NextResponse } from 'next/server'
 
-export async function POST(request) {
+export async function GET(request) {
   try {
-    const { idTentangKami } = await request.json()
-
-    const response = await getDataTentangKami(idTentangKami)
+    const json = await getDataTentangKamiAll()
 
     let json_response = {
       status: 'success',
-      data: response,
+      data: json,
     }
     return new NextResponse(JSON.stringify(json_response), {
       status: 201,
