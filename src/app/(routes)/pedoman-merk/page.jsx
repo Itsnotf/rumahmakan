@@ -45,7 +45,6 @@ import Lenis from 'lenis';
 
 export default function Page() {
     const sectionRef = useRef(null);
-    AOS.init();
 
 
     useEffect(() => {
@@ -192,8 +191,8 @@ export default function Page() {
                     <div className='mb-20'>
                         <h1 className='text-4xl  mb-2 font-semibold text-[#4F6C51]'>Logo Misuse</h1>
                         <div className='flex justify-between h-80'>
-                            <Image data-aos="fade-up-left" src={misuse1} className='w-[49%] object-cover ' />
-                            <Image data-aos="fade-up-right" src={misuse2} className='w-[49%] object-cover' />
+                            <Image  src={misuse1} className='w-[49%] object-cover ' />
+                            <Image  src={misuse2} className='w-[49%] object-cover' />
                         </div>
                     </div>
                 </div>
