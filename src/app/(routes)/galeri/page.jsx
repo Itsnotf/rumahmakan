@@ -1,56 +1,51 @@
-import React from 'react'
-import ikan from '../../../../public/assets/ikan.png'
-import Image from 'next/image'
+'use client'
 
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Image from 'next/image';
+import ikan from '../../../../public/assets/ikan.png'; // Fallback image
 
-export default function page() {
+export default function Page() {
+    const [galleryData, setGalleryData] = useState([]);
+    const [error, setError] = useState(null);
 
-    const images = [
-        {
-            class_name: 'slower-1',
-            img: ikan
-        },
-        {
-            class_name: 'slower-2',
-            img: ikan
-        },
-        {
-            class_name: 'slower-3',
-            img: ikan
-        },
-        {
-            class_name: 'slower-4',
-            img: ikan
-        },
-        {
-            class_name: 'slower-5',
-            img: ikan
-        },
-        {
-            class_name: 'slower-6',
-            img: ikan
-        },
-        {
-            class_name: 'slower-7',
-            img: ikan
-        },
-    ]
+    useEffect(() => {
+        handleGetData();
+    }, []);
+
+    const handleGetData = async () => {
+        try {
+            const response = await axios.get(`/api/gallery/read`);
+            console.log("API Response:", response.data.data);
+
+            if (Array.isArray(response.data.data)) {
+                setGalleryData(response.data.data);
+            } else {
+                console.error("Unexpected data format:", response.data);
+                setError("Unexpected data format from API");
+            }
+        } catch (error) {
+            console.error("Error:", error.message);
+            setError(error.message);
+        }
+    };
+
     return (
-
-        <div className=' h-[100vh] overflow-hidden '>
-            {/* <div className='absolute flex justify-center items-center  w-full  h-[100vh] z-50 -translate-x-full animate-indeterminate-bar'>
-                <p>Our Galeri</p>
-            </div> */}
+        <div className='h-[100vh] overflow-hidden'>
             <div className='horizontal-scroll-wrapper'>
-                {images.map(image => (
-                    <div className={`img-wrapper  ${image.class_name}`}>
-                        <a href="" target='_blank'>
-                            <Image className='img ' src={image.img} alt='' />
-                        </a>
-                    </div>
-                ))}
+                {error && <div>Error: {error}</div>}
+                {galleryData.length > 0 ? (
+                    galleryData.map((image, index) => (
+                        <div key={index} className={`img-wrapper ${image.class_name}`}>
+                            <a href={image.url} target='_blank' rel='noopener noreferrer'>
+                                <Image className='img' src={image.img || ikan} alt='Gallery Image' width={500} height={200} />
+                            </a>
+                        </div>
+                    ))
+                ) : (
+                    <div>Loading...</div>
+                )}
             </div>
         </div>
-
-    )
+    );
 }

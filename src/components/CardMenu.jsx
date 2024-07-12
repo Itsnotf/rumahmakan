@@ -42,7 +42,6 @@ export default function CardMenu({ i, nama, menu, harga, gambar, progres, range,
                         {menu.map((item, index) => (
                             <div key={index} className="flex flex-col sm:flex-row md:my-6 my-2 py-2 justify-between border-b-1" style={{ borderColor: getBorderColor(i) }}>
                                 <h1 className="md:text-xl text-lg font-medium" style={{ color: getBackgroundColor(i) === '#E4E7C4' ? '#4F6C51' : '#E4E7C4' }}>{item}</h1>
-                                <p className="text-sm font-light">Rp {harga[index]}</p>
                             </div>
                         ))}
                     </div>

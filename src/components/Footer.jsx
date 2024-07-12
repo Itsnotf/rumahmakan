@@ -11,7 +11,7 @@ import { FaInstagram } from "react-icons/fa";
 export default function Footer() {
     return (
         <div
-            className='relative  bg-[#E4E7C4]   h-[300px]'
+            className='relative bg-[#E4E7C4] h-[300px mb-10] md:h-[800px]'
             style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}>
             <div className='fixed bottom-56 lg:mx-20  mx-0 md:mx-6 sm:mx-10 h-[300px] w-full   '>
 

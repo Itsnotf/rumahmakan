@@ -7,7 +7,7 @@ import ikan from '../../public/assets/ikan.png';
 export default function Menu() {
     return (
         <div className='relative'>
-            <div className='grid grid-cols-12 gap-5 md:gap-0 py-20 md:py-36 lg:mx-16 mx-6 md:mx-6 sm:mx-10'>
+                <div className='grid grid-cols-12 gap-5 md:gap-0 py-20 md:py-36 lg:mx-16 mx-6 md:mx-6 sm:mx-10'>
                 <div className='col-span-12 md:order-1 order-2 md:col-span-6 flex flex-col justify-center gap-5 font-bold md:mx-0 lg:mx-10'>
                     <h3 className='font-medium hidden md:block text-[#A98A55]'>Menu</h3>
                     <h1 className='text-5xl hidden md:block text-[#4F6C51]'>Top Menu yang menjadi Incaran Wisatawan</h1>

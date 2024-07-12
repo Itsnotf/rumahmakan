@@ -8,6 +8,7 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import Footer from "@/components/Footer";
 import Testi from "@/components/Testi";
+import Ulasan from "@/components/Ulasan";
 
 export default function Home() {
   const container = useRef();
@@ -28,13 +29,12 @@ export default function Home() {
   }, []);
 
   return (
-    <main ref={container} className=" h-[200vh]">
+    <main ref={container} className=" h-[210vh]">
       <Hero scrollYProgress={scrollYProgress} />
       <Sejarah scrollYProgress={scrollYProgress} />
       <Kuantitatif scrollYProgress={scrollYProgress} />
       <Menu scrollYProgress={scrollYProgress} />
       <Testi />
-      <Footer />
     </main>
   );
 }
