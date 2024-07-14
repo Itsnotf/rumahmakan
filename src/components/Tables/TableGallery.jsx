@@ -27,6 +27,7 @@ const TableGallery = () => {
       // Ensure response.data.data is an array
       if (Array.isArray(response.data.data)) {
         setGalleryData(response.data.data);
+        console.log(response.data.data);
       } else {
         console.error("Unexpected data format:", response.data);
         setError("Unexpected data format from API");
