@@ -5,7 +5,7 @@ import { useTransform, motion } from "framer-motion";
 
 export default function Hero({scrollYProgress}) {
 
-  const scale = useTransform(scrollYProgress, [0 , 1], [ 1, 0.8])
+  const scale = useTransform(scrollYProgress, [0 , 1], [ 1, 0.5])
   const rotate = useTransform(scrollYProgress, [0, 1], [0, -10])
 
 

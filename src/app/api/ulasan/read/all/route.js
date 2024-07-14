@@ -1,4 +1,4 @@
-import { getDataUlasanAll } from '@/service/data/ulasan'
+import  getDataUlasanAll  from '@/service/data/ulasan'
 import { NextResponse } from 'next/server'
 
 export async function GET(request) {

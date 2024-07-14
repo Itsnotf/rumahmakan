@@ -42,12 +42,9 @@ import feed from '../../../../public/assets/insta/feed.png';
 import high from '../../../../public/assets/insta/high.png';
 import profile from '../../../../public/assets/insta/profile.png';
 import Lenis from 'lenis';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 
 export default function Page() {
     const sectionRef = useRef(null);
-    AOS.init();
 
 
     useEffect(() => {
@@ -111,11 +108,11 @@ export default function Page() {
             </div>
 
             <div className='min-w-full  grid grid-cols-12 h-full  snap-center'>
-                <div data-aos="fade-right" className='col-span-6 flex flex-col mt-[90px] mx-24 h-full '>
+                <div  className='col-span-6 flex flex-col mt-[90px] mx-24 h-full '>
                     <h1 className='text-4xl mb-2 font-semibold text-[#4F6C51]'>Jenis Logo</h1>
                     <div className='flex gap-5 flex-col '>
                         <Image src={Logo1} className='  ring-orange-200 h-[50%] object-contain border-8 border-orange-100 rounded-sm object-center ' />
-                        <p data-aos="fade-right" className='text-justify'>Logo “Lesehan Bakso Palapa” mulai mengikuti
+                        <p  className='text-justify'>Logo “Lesehan Bakso Palapa” mulai mengikuti
                             perkembangan zaman dengan jenis logo
                             combination mark yang terkesan simple. Tampilan
                             logo yang modern ini membuat citra merek
@@ -173,12 +170,12 @@ export default function Page() {
                                 ketajaman.</p>
                         </div>
                         <div className='h-96'>
-                            <Image data-aos="fade-left" src={scalability} className='object-cover h-full object-center  ' />
+                            <Image  src={scalability} className='object-cover h-full object-center  ' />
                         </div>
                     </div>
                     <div className='flex gap-5'>
                         <div className='h-[500px] w-[80%]' >
-                            <Image data-aos="fade-right" src={lockups} className='object-cover object-center h-full ' />
+                            <Image  src={lockups} className='object-cover object-center h-full ' />
                         </div>
                         <div className='flex flex-col w-[90%] mt-28 justify-start gap-10  '>
                             <h1 className='text-4xl  mb-2 font-semibold text-[#4F6C51]'>Lockups</h1>
@@ -194,8 +191,8 @@ export default function Page() {
                     <div className='mb-20'>
                         <h1 className='text-4xl  mb-2 font-semibold text-[#4F6C51]'>Logo Misuse</h1>
                         <div className='flex justify-between h-80'>
-                            <Image data-aos="fade-up-left" src={misuse1} className='w-[49%] object-cover ' />
-                            <Image data-aos="fade-up-right" src={misuse2} className='w-[49%] object-cover' />
+                            <Image  src={misuse1} className='w-[49%] object-cover ' />
+                            <Image  src={misuse2} className='w-[49%] object-cover' />
                         </div>
                     </div>
                 </div>
@@ -205,7 +202,7 @@ export default function Page() {
                 <div className='mt-[90px] flex flex-col gap-20 mx-28'>
                     <div className='flex '>
                         <div className='w-[70%]' >
-                            <Image data-aos="fade-right" src={clean} className='object-cover object-center h-full ' />
+                            <Image  src={clean} className='object-cover object-center h-full ' />
                         </div>
                         <div className='flex flex-col gap-5 justify-center'>
                             <h1 className='text-4xl  mb-2 font-semibold text-[#4F6C51]'>Clean Space</h1>
@@ -222,7 +219,7 @@ export default function Page() {
                                 dan bawah kiri.</p>
                         </div>
                         <div className='flex justify-end w-full ' >
-                            <Image data-aos="fade-left" src={penempatan} className='object-cover w-[70%] object-center h-full ' />
+                            <Image  src={penempatan} className='object-cover w-[70%] object-center h-full ' />
                         </div>
                     </div>
                     <div>
@@ -232,7 +229,7 @@ export default function Page() {
                         <div className='flex w-full gap-2 h-[500px]'>
                             <div className='flex flex-col w-full gap-2'>
                                 <div
-                                    data-aos="fade-right"
+                                    
                                     className='h-full w-full rounded-md'
                                     style={{
                                         backgroundImage: `url(${ayam.src})`,
@@ -246,7 +243,6 @@ export default function Page() {
                                     </div>
                                 </div>
                                 <div
-                                    data-aos="fade-up"
                                     className='h-[50%] w-full rounded-md'
                                     style={{
                                         backgroundImage: `url(${ikan.src})`,
@@ -261,7 +257,6 @@ export default function Page() {
                                 </div>
                             </div>
                             <div
-                                data-aos="fade-left"
                                 className='rounded-md w-full h-full'
                                 style={{
                                     backgroundImage: `url(${kuan.src})`,
