@@ -1,24 +1,34 @@
 "use client";
 
 import axios from "axios";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import React from "react";
 
 const TentangKami = () => {
   const [tentangKamiData, setTentangKamiData] = useState([]);
   const [error, setError] = useState(null);
-  const [formInput, setFormInput] = useState({
-    idTentangKami: "",
+  const [newTentangKami, setNewTentangKami] = useState({
     title: "",
     visi: "",
     misi: "",
     banner: null,
   });
-  const [editingItemId, setEditingItemId] = useState(null);
+  const [editingTentangKami, setEditingTentangKami] = useState(null);
+  const [validationError, setValidationError] = useState(null);
 
   useEffect(() => {
     handleGetData();
   }, []);
+
+  const validateForm = () => {
+    if (!newTentangKami.title || !newTentangKami.visi || !newTentangKami.misi) {
+      setValidationError("All fields are required.");
+      return false;
+    }
+    setValidationError(null);
+    return true;
+  };
 
   const handleGetData = async () => {
     try {
@@ -33,93 +43,62 @@ const TentangKami = () => {
     }
   };
 
-  const handleUpdateData = async (id, newData) => {
+  const handleUpdateData = async () => {
     try {
-      console.log("Sending data to backend:", newData);
-      const response = await axios.post('/api/tentangKami/update', newData, {
+      const formData = new FormData();
+      formData.append("idTentangKami", editingTentangKami.idTentangKami);
+      if (newTentangKami.banner && newTentangKami.banner instanceof File) {
+        formData.append("banner", newTentangKami.banner);
+      }
+      formData.append("title", newTentangKami.title);
+      formData.append("visi", newTentangKami.visi);
+      formData.append("misi", newTentangKami.misi);
+
+      const response = await axios.post(`/api/tentangKami/update`, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "multipart/form-data",
         },
       });
-  
-      console.log("Data successfully updated:", response.data);
+
+      console.log("Data successfully updated");
+
       handleGetData();
-      setEditingItemId(null);
+      setEditingTentangKami(null);
+      setNewTentangKami({ title: "", visi: "", misi: "", banner: null });
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error:", error.message);
+        console.log("Data failed to update");
       }
     }
   };
 
-  const handleInputChange = (event) => {
-    const { name, value, files } = event.target;
-
-    if (name === "banner") {
-      setFormInput((prevInput) => ({
-        ...prevInput,
-        [name]: files[0],
-      }));
-    } else {
-      setFormInput((prevInput) => ({
-        ...prevInput,
-        [name]: value,
-      }));
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTentangKami({ ...newTentangKami, [name]: value });
   };
 
-  const handleEdit = (id) => {
-    setEditingItemId(id);
-    const selectedItem = tentangKamiData.find(
-      (item) => item.idTentangKami === id
-    );
+  const handleFileChange = (e) => {
+    setNewTentangKami({ ...newTentangKami, banner: e.target.files[0] });
+  };
 
-    setFormInput({
-      idTentangKami: selectedItem.idTentangKami,
-      title: selectedItem.title,
-      visi: selectedItem.visi,
-      misi: selectedItem.misi,
+  const handleEdit = (tentangKamiItem) => {
+    setEditingTentangKami(tentangKamiItem);
+    setNewTentangKami({
+      title: tentangKamiItem.title,
+      visi: tentangKamiItem.visi,
+      misi: tentangKamiItem.misi,
       banner: null,
     });
   };
 
-  const handleCancelEdit = () => {
-    setEditingItemId(null);
-    setFormInput({
-      idTentangKami: "",
-      title: "",
-      visi: "",
-      misi: "",
-      banner: null,
-    });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const id = formInput.idTentangKami;
-    const newData = {
-      idTentangKami: formInput.idTentangKami,
-      data: {
-        title: formInput.title,
-        visi: formInput.visi,
-        misi: formInput.misi,
-      },
-      banner: formInput.banner,
-    };
-
-    try {
-      await handleUpdateData(id, newData);
-    } catch (error) {
-      console.error("Error updating data:", error.message);
-    }
-  };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Data Tentang Kami</h1>
-      {error && <p className="text-red-600">{error}</p>}
-      <table className="min-w-full bg-white mb-4">
+      <h1 className="text-2xl font-bold mb-4">Menu</h1>
+      {error && <p>Error: {error}</p>}
+      {validationError && <p className="text-red-500">{validationError}</p>}
+      <table className="min-w-full bg-white">
         <thead>
           <tr>
             <th className="py-2">Title</th>
@@ -130,91 +109,104 @@ const TentangKami = () => {
           </tr>
         </thead>
         <tbody>
-          {tentangKamiData.map((item) => (
-            <tr key={item.idTentangKami}>
-              <td className="border px-4 py-2">{item.title}</td>
-              <td className="border px-4 py-2">{item.visi}</td>
-              <td className="border px-4 py-2">{item.misi}</td>
-              <td className="border px-4 py-2">
-                <img
-                  src={item.banner}
-                  alt={item.title}
-                  className="max-w-full h-auto"
-                />
-              </td>
-              <td className="border px-4 py-2">
-                {editingItemId === item.idTentangKami ? (
-                  <div className="flex">
-                    <button
-                      onClick={handleSubmit}
-                      type="submit"
-                      className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                    >
-                      Update
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleCancelEdit}
-                      className="bg-red-500 text-white px-4 py-2 rounded"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                ) : (
+          <tr>
+            <td className="border px-4 py-2">
+              <input
+                type="text"
+                name="title"
+                value={newTentangKami.title}
+                onChange={handleInputChange}
+                className="border rounded px-2 py-1"
+                placeholder="Title"
+              />
+            </td>
+            <td className="border px-4 py-2">
+              <input
+                type="text"
+                name="visi"
+                value={newTentangKami.visi}
+                onChange={handleInputChange}
+                className="border rounded px-2 py-1"
+                placeholder="Visi"
+              />
+            </td>
+            <td className="border px-4 py-2">
+              <input
+                type="text"
+                name="misi"
+                value={newTentangKami.misi}
+                onChange={handleInputChange}
+                className="border rounded px-2 py-1"
+                placeholder="Misi"
+              />
+            </td>
+            <td className="border px-4 py-2">
+              <input
+                type="file"
+                name="banner"
+                onChange={handleFileChange}
+                className="border rounded px-2 py-1"
+                placeholder="Misi"
+              />
+            </td>
+            <td className="border px-4 py-2">
+              {editingTentangKami ? (
+                <button
+                  onClick={handleUpdateData}
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Update
+                </button>
+              ) : (
+                ""
+              )}
+            </td>
+          </tr>
+          {Array.isArray(tentangKamiData) &&
+            tentangKamiData.map((tentangKamiItem, key) => (
+              <tr key={key}>
+                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {tentangKamiItem.title}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {tentangKamiItem.visi}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                  <h5 className="font-medium text-black dark:text-white">
+                    {tentangKamiItem.misi}
+                  </h5>
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                  <Image
+                    src={tentangKamiItem.banner}
+                    alt={tentangKamiItem.title}
+                    width={100}
+                    height={100}
+                    className="object-cover"
+                  />
+                </td>
+                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <button
-                    type="button"
-                    onClick={() => handleEdit(item.idTentangKami)}
-                    className="bg-green-500 text-white px-4 py-2 rounded"
+                    onClick={() => handleEdit(tentangKamiItem)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded"
                   >
                     Edit
                   </button>
-                )}
-              </td>
-            </tr>
-          ))}
+                  <button
+                    onClick={() => handleDelete(tentangKamiItem)}
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
-      {editingItemId && (
-        <form onSubmit={handleSubmit} className="flex items-center">
-          <input
-            type="hidden"
-            name="idTentangKami"
-            value={formInput.idTentangKami}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="title"
-            value={formInput.title}
-            onChange={handleInputChange}
-            className="border rounded px-2 py-1 mr-2"
-            placeholder="Title"
-            required
-          />
-          <textarea
-            name="visi"
-            value={formInput.visi}
-            onChange={handleInputChange}
-            className="border rounded px-2 py-1 mr-2"
-            placeholder="Visi"
-            required
-          />
-          <textarea
-            name="misi"
-            value={formInput.misi}
-            onChange={handleInputChange}
-            className="border rounded px-2 py-1 mr-2"
-            placeholder="Misi"
-            required
-          />
-          <input
-            type="file"
-            name="banner"
-            onChange={handleInputChange}
-            className="border rounded px-2 py-1 mr-2"
-          />
-        </form>
-      )}
     </div>
   );
 };

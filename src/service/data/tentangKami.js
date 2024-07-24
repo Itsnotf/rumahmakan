@@ -68,41 +68,47 @@ export async function tambahTentangKami(dataTentangKami) {
   }
 }
 
-// Mengubah data tentang kami berdasarkan ID
-export async function ubahTentangKami(idTentangKami, dataTentangKami, banner) {
+export async function ubahTentangKami(idTentangKami, dataTentangKami) {
   try {
-    let imageUrl = null;
+    const { img, ...otherData } = dataTentangKami;
 
-    // Upload banner file jika ada
-    if (banner) {
-      console.log("Uploading banner file...");
-      const storage = getStorage();
-      const storageRef = ref(storage, `tentangkami/${banner.name}`);
-      await uploadBytes(storageRef, banner);
-      imageUrl = await getDownloadURL(storageRef);
-      console.log("Banner uploaded. Image URL:", imageUrl);
+    if (img && img.name) {
+      const storageRef = ref(storage, `tentangkami/${img.name}`);
+      const snapshot = await uploadBytes(storageRef, img);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      otherData.img = downloadURL;
     }
 
-    // Update dataTentangKami dengan imageUrl jika ada
-    if (imageUrl) {
-      dataTentangKami.banner = imageUrl;
-    }
-
-    console.log("Final dataTentangKami:", dataTentangKami);
-
-    // Referensi dokumen yang akan diperbarui
     const tentangKamiDocRef = doc(db, "tentangkami", idTentangKami);
+    await updateDoc(tentangKamiDocRef, otherData);
 
-    // Lakukan update dokumen di Firestore
-    await updateDoc(tentangKamiDocRef, dataTentangKami);
-
-    console.log("Document successfully updated in Firestore:", dataTentangKami);
-    return dataTentangKami;
+    console.log("Tentang kami berhasil diubah");
   } catch (error) {
-    console.error("Error updating document in Firestore:", error);
+    console.error("Error mengubah tentang kami:", error);
     throw error;
   }
 }
+
+// export async function ubahmenu(idmenu, datamenu) {
+//   try {
+//     const { img, ...otherData } = datamenu;
+
+//     if (img && img.name) {
+//       const storageRef = ref(storage, `menu/${img.name}`);
+//       const snapshot = await uploadBytes(storageRef, img);
+//       const downloadURL = await getDownloadURL(snapshot.ref);
+//       otherData.img = downloadURL;
+//     }
+
+//     const menuDocRef = doc(db, "menu", idmenu);
+//     await updateDoc(menuDocRef, otherData);
+
+//     console.log("menu berhasil diubah");
+//   } catch (error) {
+//     console.error("Error mengubah menu:", error);
+//     throw error;
+//   }
+// }
 
 // Menghapus data tentang kami berdasarkan ID
 export async function hapusTentangKami(idTentangKami) {
