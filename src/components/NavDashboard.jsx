@@ -15,7 +15,7 @@ export default function NavDashboard() {
         { name: "Kelola Galeri", path: "/kelola-galeri" },
         { name: "Kelola Tentang Kami", path: "/kelola-tentangkami" },
         { name: "Kelola Ulasan", path: "/kelola-ulasan" },
-        { name: "Kelola Home", path: "/kelola-home" },
+        { name: "Kelola Menu", path: "/kelola-menu" },
     ];
 
 
