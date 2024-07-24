@@ -24,7 +24,6 @@ const TableGallery = () => {
     try {
       const response = await axios.get(`/api/gallery/read`);
 
-      // Ensure response.data.data is an array
       if (Array.isArray(response.data.data)) {
         setGalleryData(response.data.data);
         console.log(response.data.data);
@@ -35,7 +34,7 @@ const TableGallery = () => {
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error:", error.message);
-        setError(error.message); // Set error state
+        setError(error.message); 
         console.log("Data failed to fetch");
       }
     }
