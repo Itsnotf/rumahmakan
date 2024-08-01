@@ -69,7 +69,7 @@ export default function Ulasan() {
                         labelPlacement="outside"
                         placeholder="Enter your description"
                         className="col-span-12 md:col-span-6 mb-6 md:mb-0"
-                        value={newUlasan.desk}
+                        value={newUlasan.deskripsi}
                         onChange={handleInputChange}
                     />
                     <Button className='bg-[#A98A55] max-w-xs text-white' radius='full' variant="shadow" onClick={handleAdd}>Kirim</Button>
