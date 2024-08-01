@@ -1,5 +1,4 @@
 'use client'
-'use client'
 
 import { Button, Card, Input, Textarea } from '@nextui-org/react'
 import React, { useState } from 'react'
@@ -7,7 +6,7 @@ import Footer from './Footer'
 import axios from 'axios';
 
 export default function Ulasan() {
-    const [newUlasan, setNewUlasan] = useState({ name: "", desk: "", email: "", createdAt: "" });
+    const [newUlasan, setNewUlasan] = useState({ name: "", deskripsi: "", email: "", createdAt: "" });
     const [ulasanData, setUlasanData] = useState([]);
     const [error, setError] = useState("");
 
@@ -16,13 +15,13 @@ export default function Ulasan() {
             const currentDate = new Date().toISOString().split('T')[0]; // Get the current date in YYYY-MM-DD format
             const ulasanWithDate = { ...newUlasan, createdAt: currentDate };
 
-            const response = await axios.post(`/api/ulasan/create`, ulasanWithDate, {
+            const response = await axios.post(`/api/createUlasan`, ulasanWithDate, {
                 headers: { "Content-Type": "application/json" },
             });
 
             const addedUlasan = response.data;
             setUlasanData([...ulasanData, addedUlasan]);
-            setNewUlasan({ name: "", desk: "", email: "", createdAt: "" });
+            setNewUlasan({ name: "", deskripsi: "", email: "", createdAt: "" });
             console.log("Data successfully added");
         } catch (error) {
             console.error("Error:", error.message);
@@ -37,8 +36,6 @@ export default function Ulasan() {
     };
 
     return (
-      
-         
                 <Card className='p-10 col-span-12 flex flex-col gap-10'>
                     <div className='flex md:flex-row flex-col gap-10  justify-between'>
                         <Input
@@ -68,7 +65,7 @@ export default function Ulasan() {
                         isRequired
                         variant='underlined'
                         label="Berikan Ulasan Anda"
-                        name="desk"
+                        name="deskripsi"
                         labelPlacement="outside"
                         placeholder="Enter your description"
                         className="col-span-12 md:col-span-6 mb-6 md:mb-0"
